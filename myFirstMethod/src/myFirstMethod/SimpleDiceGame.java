@@ -1,3 +1,10 @@
+/* 
+* Author: Samuel Ferrara
+* Date: 2019-10-24
+* My first Java program consiting in a simple dice game
+* 
+*/ 
+
 package myFirstMethod;
 import java.util.*;
 public class SimpleDiceGame {
@@ -13,13 +20,16 @@ public class SimpleDiceGame {
 	public static void main(String[] args) {
 
 		// Username input
-		
 		System.out.println("Please enter your username: ");
 		userName=in.nextLine();
 		money=1000;
+		
 		System.out.println("Welcome " + userName + "!");
 		System.out.println("You have: $" + money);
+		
+		// initialize method "rollDice"
 		rollDice();
+		
 		playAgain();
 	
 		}
@@ -28,9 +38,11 @@ public class SimpleDiceGame {
 	
 	public static void rollDice()
 	{
+		// Input från användaren angående vilket nummer man vill satsa på
 		System.out.println("What number would you like to bet on? (1-6) ");
 		int betRoll = in.nextInt();
 		
+		// while loop som ser till
 		while (( betRoll> 6 | betRoll <1 ))
 		{
 			System.out.println("You can only bet on a number between 1-6" + "." + 
@@ -75,7 +87,10 @@ public class SimpleDiceGame {
 	Scanner in = new Scanner(System.in);
 	System.out.println("Would you like to play again? ");
 	again = in.nextLine();
-	
+		
+	/* det är här jag vill att man ska kunna välja om metoden "rollDice()"
+	*  ska anropas igen.
+	*/
 	if(again =="yes")
 	{
 		rollDice();
