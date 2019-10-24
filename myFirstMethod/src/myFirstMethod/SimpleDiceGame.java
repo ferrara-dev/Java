@@ -12,6 +12,39 @@ import java.util.Scanner;
 
 public class SimpleDiceGame {
 
+	private static final String[] lines = {
+
+					"+-------+\n"+
+					"|       |\n"+
+					"|   o   |\n"+
+					"|       |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o     |\n"+
+					"|       |\n"+
+					"|     o |\n"+
+					"+-------+",
+					"+-------+\n"+
+					"| o     |\n"+
+					"|   o   |\n"+
+					"|     o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"|       |\n"+
+					"| o   o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"|   o   |\n"+
+					"| o   o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"| o   o |\n"+
+					"| o   o |\n"+
+					"+-------+\n"
+	};
 
 	private static final String YES = "yes";
 	private static int money;
@@ -74,7 +107,7 @@ public class SimpleDiceGame {
         int betRoll = chooseDiceFace();
         int betMoney = bet();
         int dice = random.nextInt(6) + 1;
-        System.out.println(String.format("The dice roll's: %s !", dice) );
+        System.out.println(String.format("The dice roll's:\n%s", lines[dice-1]) );
         if (betRoll == dice) {
             int winning = 2 * betMoney;
             money = money + winning;
