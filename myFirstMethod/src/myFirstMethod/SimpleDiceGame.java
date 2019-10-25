@@ -1,99 +1,143 @@
-/* 
-* Author: Samuel Ferrara
-* Date: 2019-10-24
-* My first Java program consiting in a simple dice game
-* 
-*/ 
+/*
+ * Author: Samuel Ferrara
+ * Date: 2019-10-24
+ * My first Java program consiting in a simple dice game
+ *
+ */
 
 package myFirstMethod;
-import java.util.*;
+
+import java.util.Random;
+import java.util.Scanner;
+
 public class SimpleDiceGame {
 
-	
-	static int money;
-	static String userName;
-	static String password;
-	static String again;
-	static Scanner in = new Scanner(System.in);
-	static Random random = new Random();
+	private static final String[] lines = {
 
-	public static void main(String[] args) {
+					"+-------+\n"+
+					"|       |\n"+
+					"|   o   |\n"+
+					"|       |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o     |\n"+
+					"|       |\n"+
+					"|     o |\n"+
+					"+-------+",
+					"+-------+\n"+
+					"| o     |\n"+
+					"|   o   |\n"+
+					"|     o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"|       |\n"+
+					"| o   o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"|   o   |\n"+
+					"| o   o |\n"+
+					"+-------+\n",
+					"+-------+\n"+
+					"| o   o |\n"+
+					"| o   o |\n"+
+					"| o   o |\n"+
+					"+-------+\n"
+	};
 
-		// Username input
-		System.out.println("Please enter your username: ");
-		userName=in.nextLine();
-		money=1000;
-		
-		System.out.println("Welcome " + userName + "!");
-		System.out.println("You have: $" + money);
-		
-		// initialize method "rollDice"
-		rollDice();
-		
-		playAgain();
-	
-		}
-	
-	
-	
-	public static void rollDice()
-	{
+	private static final String YES = "yes";
+	private static int money;
+    private static Scanner in = new Scanner(System.in);
+    private static Random random = new Random();
+
+    public static void main(String[] args) {
+
+       // Username input
+        System.out.println("Please enter your username: ");
+        String userName = in.nextLine();
+        money = 1000;
+
+        System.out.println(String.format("Welcome %s!", userName));
+        System.out.println(String.format("You have: %s$" , money));
+
+        // initialize method "rollDice"
+        while (money > 0) {
+            rollDice();
+        }
+
+    }
+
+    private static int chooseDiceFace() {
 		// Input från användaren angående vilket nummer man vill satsa på
+		int r = 0;
 		System.out.println("What number would you like to bet on? (1-6) ");
-		int betRoll = in.nextInt();
-		
-		// while loop som ser till
-		while (( betRoll> 6 | betRoll <1 ))
-		{
-			System.out.println("You can only bet on a number between 1-6" + "." + 
-		" Please enter the number you would like to bet on: ");
-		betRoll = in.nextInt();
+		try {
+			r =  in.nextInt();
+			if ((r > 6 || r < 1)) {
+				System.out.println("You can only bet on a number between 1-6.");
+				r =chooseDiceFace();
+			}
+		} catch (Exception e) {
+			in.nextLine();
+			r = chooseDiceFace();
 		}
-		System.out.println("Your current balance is: $" + money);
+		return r;
+	}
+
+	private static int bet() {
+		int betMoney = 0;
+		System.out.println(String.format("Your current balance is: %s $" , money));
 		System.out.println("How much would you like to bet? ");
-		
-		int betMoney = in.nextInt();
-		while(money < betMoney) 
-		{
-		System.out.println("You dont have that much money!" + "\n" + " You have: $"+ money + "." +
-		"\n Please enter your bet: ");
-		betMoney = in.nextInt();
-		
+		try {
+			betMoney = in.nextInt();
+			if (betMoney < 0 || betMoney > money) {
+				System.out.println(String.format("You can only bet between 1 to %s.", money));
+				betMoney =bet();
+			}
+		} catch (Exception e) {
+			in.nextLine();
+			betMoney =bet();
 		}
-		int dice;
-		dice = random.nextInt(6)+1;
-		System.out.println("The dice roll's: " + dice + " " + "!");
-		if(betRoll==dice)
-		{
-			System.out.println("You won: $" + 2*betMoney + "!");
-			money = money + 2*betMoney;
-			System.out.println("Your current balance is: $" + money);
-		}
-		
-		else
-		{
-			System.out.println("You lost!");
-			money = money - betMoney;
-			System.out.println("Your current balance is: $"+ money);
-		}
-		
-		if(money <= 0)
-		{
-			System.out.println("Game over: You are broke! ");
-		}
-		
+		return betMoney;
 	}
-	public static void playAgain() {
-	Scanner in = new Scanner(System.in);
-	System.out.println("Would you like to play again? ");
-	again = in.nextLine();
-		
-	/* det är här jag vill att man ska kunna välja om metoden "rollDice()"
-	*  ska anropas igen.
-	*/
-	if(again =="yes")
-	{
-		rollDice();
-	}
-	}
+
+    private static void rollDice() {
+
+        int betRoll = chooseDiceFace();
+        int betMoney = bet();
+        int dice = random.nextInt(6) + 1;
+        System.out.println(String.format("The dice roll's:\n%s", lines[dice-1]) );
+        if (betRoll == dice) {
+            int winning = 2 * betMoney;
+            money = money + winning;
+			System.out.println(String.format("You won: %s $!" ,winning));
+            System.out.println(String.format("Your current balance is: %s $", money));
+        } else {
+            System.out.println("You lost!");
+            money = money - betMoney;
+            System.out.println(String.format("Your current balance is: %s $", money));
+        }
+
+        if (money <= 0) {
+            System.out.println("Game over: You are broke! ");
+			System.exit(0);
+        }
+		if(playAgain()) {
+			rollDice();
+		} else {
+			System.exit(0);
+		}
+    }
+
+    private static boolean playAgain() {
+
+    	boolean r = false;
+        System.out.println("Would you like to play again? ");
+		String again = in.next();
+        if (YES.equals(again)) {
+            r = true;
+        }
+        return r;
+    }
 }
